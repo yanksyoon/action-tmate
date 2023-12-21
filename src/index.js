@@ -220,7 +220,9 @@ export async function run() {
       if (publicSSHKeysWarning) {
         core.warning(publicSSHKeysWarning)
       }
-      if (tmateWeb) {
+      core.info(`ENV VARS: {process.env}`)
+      core.info(`RUNNING CMD: ${tmate} ${newSessionExtra} ${setDefaultCommand} new-session -d`)
+    if (tmateWeb) {
         core.info(`Web shell: ${tmateWeb}`);
       }
       core.info(`SSH: ${tmateSSH}`);
