@@ -174,7 +174,7 @@ export async function run() {
     }
 
     core.debug("Creating new session")
-    console.log("RUNNING CMD: ", `${tmate} ${newSessionExtra} ${setDefaultCommand} new-session -d`)
+    core.info(`RUNNING CMD: ${tmate} ${newSessionExtra} ${setDefaultCommand} new-session -d`)
     await execShellCommand(`${tmate} ${newSessionExtra} ${setDefaultCommand} new-session -d`);
     await execShellCommand(`${tmate} wait tmate-ready`);
     core.debug("Created new session successfully")
