@@ -6,6 +6,7 @@ import * as core from "@actions/core"
 import * as github from "@actions/github"
 import * as tc from "@actions/tool-cache"
 import { Octokit } from "@octokit/rest"
+import process from "process"
 
 import { execShellCommand, getValidatedEnvVars, getLinuxDistro, useSudoPrefix } from "./helpers"
 
@@ -166,6 +167,7 @@ export async function run() {
       "tmate-server-ed25519-fingerprint": /./,
     }
 
+    core.info(`ENV VARS: {process.env}`)
     for (const [key, option] of Object.entries(options)) {
       const value = getValidatedEnvVars(key, option);
       if (value !== undefined) {
