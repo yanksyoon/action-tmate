@@ -167,8 +167,6 @@ export async function run() {
     }
 
     for (const [key, option] of Object.entries(options)) {
-      if (core.getInput(key) === '')
-        continue;
       const value = getValidatedEnvVars(key, option);
       if (value !== undefined) {
         setDefaultCommand = `${setDefaultCommand} set-option -g ${key} "${value}" \\;`;
