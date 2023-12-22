@@ -189,6 +189,8 @@ export async function run() {
 
     core.debug("Fetching connection strings")
     const tmateSSH = await execShellCommand(`${tmate} display -p '#{tmate_ssh}'`);
+    const [ , ,tokenHost] = tmateSSH.split(" ");
+    const [token, ] = tokenHost.split("@")[0]
     const tmateWeb = await execShellCommand(`${tmate} display -p '#{tmate_web}'`);
 
     /*
@@ -229,7 +231,7 @@ export async function run() {
       if (tmateWeb) {
         core.info(`Web shell: ${tmateWeb}`);
       }
-      core.info(`SSH: ${host}:${port}`);
+      core.info(`SSH: ssh -p ${port} ${token}@${host}`);
       if (tmateSSHDashI) {
         core.info(`or: ${tmateSSH.replace(/^ssh/, tmateSSHDashI)}`)
       }
