@@ -167,16 +167,22 @@ export async function run() {
       "tmate-server-ed25519-fingerprint": /./,
     }
 
-    core.info(`ENV VARS: {process.env}`)
+    let host = "";
+    let port = "";
     for (const [key, option] of Object.entries(options)) {
       const value = getValidatedEnvVars(key, option);
       if (value !== undefined) {
         setDefaultCommand = `${setDefaultCommand} set-option -g ${key} "${value}" \\;`;
+        if (key === "tmate-server-host") {
+          host = value;
+        }
+        if (key === "tmate-server-port") {
+          port = value;
+        }
       }
     }
 
     core.debug("Creating new session")
-    core.info(`RUNNING CMD: ${tmate} ${newSessionExtra} ${setDefaultCommand} new-session -d`)
     await execShellCommand(`${tmate} ${newSessionExtra} ${setDefaultCommand} new-session -d`);
     await execShellCommand(`${tmate} wait tmate-ready`);
     core.debug("Created new session successfully")
@@ -220,12 +226,10 @@ export async function run() {
       if (publicSSHKeysWarning) {
         core.warning(publicSSHKeysWarning)
       }
-      core.info(`ENV VARS: {process.env}`)
-      core.info(`RUNNING CMD: ${tmate} ${newSessionExtra} ${setDefaultCommand} new-session -d`)
-    if (tmateWeb) {
+      if (tmateWeb) {
         core.info(`Web shell: ${tmateWeb}`);
       }
-      core.info(`SSH: ${tmateSSH}`);
+      core.info(`SSH: ${host}:${port}`);
       if (tmateSSHDashI) {
         core.info(`or: ${tmateSSH.replace(/^ssh/, tmateSSHDashI)}`)
       }
