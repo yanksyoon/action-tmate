@@ -1,6 +1,6 @@
 # Debug your [GitHub Actions](https://github.com/features/actions) by using [tmate](https://tmate.io)
 
-[![GitHub Actions](https://github.com/mxschmitt/action-tmate/workflows/Node.js%20CI/badge.svg)](https://github.com/mxschmitt/action-tmate/actions)
+[![GitHub Actions](https://github.com/canonical/action-tmate/workflows/Node.js%20CI/badge.svg)](https://github.com/canonical/action-tmate/actions)
 [![GitHub Marketplace](https://img.shields.io/badge/GitHub-Marketplace-green)](https://github.com/marketplace/actions/debugging-with-tmate)
 
 This GitHub Action offers you a direct way to interact with the host system on which the actual scripts (Actions) will run.
@@ -25,11 +25,11 @@ name: CI
 on: [push]
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
     - uses: actions/checkout@v3
     - name: Setup tmate session
-      uses: mxschmitt/action-tmate@v3
+      uses: canonical/action-tmate@master
 ```
 
 To get the connection string, just open the `Checks` tab in your Pull Request and scroll to the bottom. There you can connect either directly per SSH or via a web based terminal.
@@ -61,11 +61,11 @@ Then add an [`if`](https://docs.github.com/en/actions/reference/context-and-expr
 ```yaml
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       # Enable tmate debugging of manually-triggered workflows if the input option was provided
       - name: Setup tmate session
-        uses: mxschmitt/action-tmate@v3
+        uses: canonical/action-tmate@mxschmitt
         if: ${{ github.event_name == 'workflow_dispatch' && inputs.debug_enabled }}
 ```
 <!--
@@ -83,11 +83,11 @@ name: CI
 on: [push]
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
     - uses: actions/checkout@v3
     - name: Setup tmate session
-      uses: mxschmitt/action-tmate@v3
+      uses: canonical/action-tmate@mxschmitt
       with:
         detached: true
 ```
@@ -103,11 +103,11 @@ name: CI
 on: [push]
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
     - uses: actions/checkout@v3
     - name: Setup tmate session
-      uses: mxschmitt/action-tmate@v3
+      uses: canonical/action-tmate@mxschmitt
       with:
         sudo: false
 ```
@@ -121,11 +121,11 @@ name: CI
 on: [push]
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
     - uses: actions/checkout@v3
     - name: Setup tmate session
-      uses: mxschmitt/action-tmate@v3
+      uses: canonical/action-tmate@mxschmitt
       timeout-minutes: 15
 ```
 
@@ -140,12 +140,12 @@ name: CI
 on: [push]
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
     - uses: actions/checkout@v3
     - name: Setup tmate session
       if: ${{ failure() }}
-      uses: mxschmitt/action-tmate@v3
+      uses: canonical/action-tmate@mxschmitt
 ```
 <!--
 {% endraw %}
@@ -160,37 +160,16 @@ name: CI
 on: [push]
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
     - uses: actions/checkout@v3
     - name: Setup tmate session
-      uses: mxschmitt/action-tmate@v3
+      uses: canonical/action-tmate@mxschmitt
       with:
         limit-access-to-actor: true
 ```
 
 If the registered public SSH key is not your default private SSH key, you will need to specify the path manually, like so: `ssh -i <path-to-key> <tmate-connection-string>`.
-
-## Use your own tmate servers
-
-By default the tmate session uses `ssh.tmate.io`. You can use your own tmate servers. [tmate-ssh-server](https://github.com/tmate-io/tmate-ssh-server) is the server side part of tmate.
-
-```yaml
-name: CI
-on: [push]
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v3
-    - name: Setup tmate session
-      uses: mxschmitt/action-tmate@v3
-      with:
-        tmate-server-host: ssh.tmate.io
-        tmate-server-port: 22
-        tmate-server-rsa-fingerprint: SHA256:Hthk2T/M/Ivqfk1YYUn5ijC2Att3+UPzD7Rn72P5VWs
-        tmate-server-ed25519-fingerprint: SHA256:jfttvoypkHiQYUqUCwKeqd9d1fJj/ZiQlFOHVl6E9sI
-```
 
 ## Skip installing tmate
 
@@ -203,7 +182,7 @@ jobs:
   build:
     runs-on: [self-hosted, linux]
     steps:
-    - uses: mxschmitt/action-tmate@v3
+    - uses: canonical/action-tmate@mxschmitt
       with:
         install-dependencies: false
 ```
