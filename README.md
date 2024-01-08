@@ -1,5 +1,9 @@
 # Debug your [GitHub Actions](https://github.com/features/actions) by using [tmate](https://tmate.io)
 
+This is a forked version of (action-tmate)[https://github.com/mxschmitt/action-tmate], intended to
+be used with (GitHub Runner Operator)[https://github.com/canonical/github-runner-operator/] to
+provide automatic SSH debug access within the Canonical VPN.
+
 [![GitHub Actions](https://github.com/canonical/action-tmate/workflows/Node.js%20CI/badge.svg)](https://github.com/canonical/action-tmate/actions)
 [![GitHub Marketplace](https://img.shields.io/badge/GitHub-Marketplace-green)](https://github.com/marketplace/actions/debugging-with-tmate)
 
@@ -170,6 +174,28 @@ jobs:
 ```
 
 If the registered public SSH key is not your default private SSH key, you will need to specify the path manually, like so: `ssh -i <path-to-key> <tmate-connection-string>`.
+
+## Use your own tmate servers
+
+By default, this action uses environment variables to pick up tmate ssh configuration settings and
+hence the following configurations have been removed.
+
+```diff
+name: CI
+on: [push]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Setup tmate session
+      uses: mxschmitt/action-tmate@v3
+      with:
+-        tmate-server-host: ssh.tmate.io
+-        tmate-server-port: 22
+-        tmate-server-rsa-fingerprint: SHA256:Hthk2T/M/Ivqfk1YYUn5ijC2Att3+UPzD7Rn72P5VWs
+-        tmate-server-ed25519-fingerprint: SHA256:jfttvoypkHiQYUqUCwKeqd9d1fJj/ZiQlFOHVl6E9sI
+```
 
 ## Skip installing tmate
 
